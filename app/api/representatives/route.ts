@@ -82,11 +82,13 @@ export async function POST(request: Request) {
 
 I am writing to you as a concerned constituent to urge immediate action to support our Kurdish allies in Northeast Syria (Rojava).
 
-Kurdish forces were America's most vital boots-on-the-ground allies in defeating the physical ISIS caliphate, sacrificing thousands of lives in a fight that protected us all. They are now dangerously abandoned to Turkish aggression, Syrian regime threats, and geopolitical instability.
+Kurdish forces were America’s most vital boots-on-the-ground allies in defeating the physical ISIS caliphate, sacrificing thousands of lives in a fight that protected us all. Today, these same communities are dangerously abandoned—facing Turkish military aggression, threats from the Syrian regime, and severe geopolitical instability.
 
-If this region destabilizes further, there is a dire risk that thousands of ISIS prisoners currently held in Kurdish detention camps will escape, leading to a resurgence of global terror that threatens US national security.
+The humanitarian situation is rapidly deteriorating. Large areas of Northeast Syria are without electricity, clean water, or heating, leaving civilians—especially children, the elderly, and the sick—exposed to extreme hardship. Tragically, reports indicate that a fifth child has recently died due to cold and lack of basic services, underscoring the urgency of this crisis.
 
-We must not abandon those who fought alongside us. I urge you to take action to ensure the continued stability and security of Northeast Syria.
+Beyond the humanitarian disaster, there are serious implications for U.S. national security. If this region destabilizes further, there is a dire risk that thousands of ISIS prisoners currently held in Kurdish-run detention camps could escape, potentially leading to a resurgence of global terrorism.
+
+We must not abandon those who fought alongside us at great cost. I respectfully urge you to take immediate action to support humanitarian aid, protect civilian infrastructure, and ensure the continued stability and security of Northeast Syria.
 
 Sincerely,
 
