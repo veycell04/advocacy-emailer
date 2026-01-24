@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
-import Lob from 'lob';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const Lob = require('lob');
+;
 
 // Initialize Lob with your API Key
 const lob = new Lob(process.env.LOB_API_KEY as string);
