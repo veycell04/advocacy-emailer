@@ -76,35 +76,40 @@ export async function POST(request: Request) {
     if (!zipResponse.ok) return NextResponse.json({ error: 'Zip Code not found.', source: 'zippopotam' }, { status: 404 });
     const zipData = await zipResponse.json();
     const stateAbbrev = zipData.places[0]['state abbreviation'];
-    const stateName = zipData.places[0]['state'];
 
     const senators = SENATOR_DATA[stateAbbrev];
     if (!senators) return NextResponse.json({ error: `Could not find senator data for state: ${stateAbbrev}` }, { status: 404 });
 
-    const messageBody = `Dear Senator,
+    // --- FIX IS HERE: Generate unique body for each senator ---
+    const finalResults = senators.map((sen) => {
+        // We construct the body specifically for THIS senator using sen.name
+        const specificBody = `Honorable ${sen.name},
 
-I am writing to you as a concerned constituent to urge immediate action to support our Kurdish allies in Northeast Syria (Rojava).
+I am writing to you as a concerned constituent to respectfully ask for your leadership and support in addressing the escalating humanitarian and security crisis in Northeast Syria (Rojava).
 
-Kurdish forces were America’s most vital boots-on-the-ground allies in defeating the physical ISIS caliphate, sacrificing thousands of lives in a fight that protected us all. Today, these same communities are dangerously abandoned—facing Turkish military aggression, threats from the Syrian regime, and severe geopolitical instability.
+Kurdish forces were among America's most critical partners in the fight to defeat the ISIS caliphate, sacrificing thousands of lives to protect regional and global security. Today, these same allies are facing grave threats, including ongoing Turkish military pressure, hostility from the Syrian regime, and growing regional instability largely without sufficient international protection.
 
-The humanitarian situation is rapidly deteriorating. Large areas of Northeast Syria are without electricity, clean water, or heating, leaving civilians—especially children, the elderly, and the sick—exposed to extreme hardship. Tragically, reports indicate that a fifth child has recently died due to cold and lack of basic services, underscoring the urgency of this crisis.
+The humanitarian situation on the ground is dire and worsening. Vast areas of Northeast Syria lack electricity, clean water, and heating. Civilians, especially children, the elderly, and the medically vulnerable are suffering under extreme conditions. Reports indicate that a fifth child has recently died due to cold exposure and the absence of basic services. This tragic loss highlights the urgent need for immediate humanitarian intervention.
 
-Beyond the humanitarian disaster, there are serious implications for U.S. national security. If this region destabilizes further, there is a dire risk that thousands of ISIS prisoners currently held in Kurdish-run detention camps could escape, potentially leading to a resurgence of global terrorism.
+This crisis also poses serious risks to U.S. national security. Continued instability increases the likelihood that thousands of ISIS detainees currently held in Kurdish run facilities could escape, potentially enabling a resurgence of terrorist activity that would endanger both the region and the United States.
 
-We must not abandon those who fought alongside us at great cost. I respectfully urge you to take immediate action to support humanitarian aid, protect civilian infrastructure, and ensure the continued stability and security of Northeast Syria.
+I respectfully urge you to use your position to advocate for concrete action, including increased humanitarian assistance, protection of civilian infrastructure, diplomatic pressure to prevent further aggression, and continued support for the stability and security of Northeast Syria. Our nation must not abandon those who stood with us at great cost.
+
+Thank you for your time and consideration. I hope you will act to ensure that America remains a reliable ally and a force for humanitarian leadership.
 
 Sincerely,
 
 ${firstName} ${lastName}`;
 
-    const finalResults = senators.map((sen) => ({
-        name: sen.name,
-        contactUrl: sen.contactUrl,
-        fax: sen.fax,
-        phone: sen.phone, 
-        body: messageBody,
-        userState: stateAbbrev
-    }));
+        return {
+            name: sen.name,
+            contactUrl: sen.contactUrl,
+            fax: sen.fax,
+            phone: sen.phone,
+            body: specificBody, // This now contains "Honorable [Name]"
+            userState: stateAbbrev
+        };
+    });
 
     return NextResponse.json({ reps: finalResults });
 

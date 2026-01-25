@@ -472,11 +472,12 @@ export default function Home() {
                             </div>
                         </div>
 
-                        <p className="font-bold">Honorable {senators[activePreviewIndex]?.name || "Senator"},</p>
                         
-                        <div className="whitespace-pre-wrap">
-                            {senators[activePreviewIndex]?.body || "Loading message preview..."}
-                        </div>
+                        
+                        {/* Header line removed because it is now inside the body */}
+<div className="whitespace-pre-wrap font-medium">
+    {senators[activePreviewIndex]?.body || "Loading message preview..."}
+</div>
 
                     
                     </div>

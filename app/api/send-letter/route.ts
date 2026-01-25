@@ -39,8 +39,7 @@ export async function POST(request: Request) {
       United States Senate<br>
       Washington, DC 20510
     </div>
-    
-    <div class="salutation">Dear Senator ${senator.name.split(' ').pop()},</div>
+
     
     <div class="body">
       ${senator.body.replace(/\n/g, '<br>')} <!-- Replace newlines with HTML breaks -->
