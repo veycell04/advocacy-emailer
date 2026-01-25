@@ -3,22 +3,24 @@ import Stripe from 'stripe';
 
 // Initialize Stripe with your Secret Key
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
-  apiVersion: '2025-12-15.clover', // ✅ Current version
+  apiVersion: '2023-10-16', // Use stable version or your current one
 });
 
-
 // Pricing breakdown (in cents)
+// Matches Frontend: Letter ($2.00), Fax ($1.00), Both ($3.00)
 const PRICES = {
-    letter: 110, // $1.10 per letter (covers Lob cost + tiny buffer for Stripe fees)
-    fax: 25,     // $0.25 per fax (covers Twilio cost + tiny buffer)
+    letter: 200, 
+    fax: 100,     
+    both: 300     
 };
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { actionType, senatorCount } = body; // 'letter' or 'fax', and number of senators (usually 2)
+    const { actionType, senatorCount } = body; 
 
-    if (!actionType || !['letter', 'fax'].includes(actionType) || !senatorCount || senatorCount < 1) {
+    // --- CRITICAL FIX: Ensure 'both' is allowed ---
+    if (!actionType || !['letter', 'fax', 'both'].includes(actionType) || !senatorCount || senatorCount < 1) {
         return NextResponse.json({ error: 'Invalid payment request data.' }, { status: 400 });
     }
 
@@ -30,17 +32,15 @@ export async function POST(request: Request) {
     const paymentIntent = await stripe.paymentIntents.create({
       amount: totalAmount,
       currency: 'usd',
-      // In the metadata, we store what the user is buying so we know what to do after they pay.
       metadata: {
         actionType: actionType,
         senatorCount: senatorCount.toString()
       },
       automatic_payment_methods: {
-        enabled: true, // This enables Apple Pay / Google Pay automatically
+        enabled: true, 
       },
     });
 
-    // Send the "client secret" to the frontend. This is the key the frontend needs to show the payment form.
     return NextResponse.json({ clientSecret: paymentIntent.client_secret, totalAmount: totalAmount });
 
   } catch (error: any) {
