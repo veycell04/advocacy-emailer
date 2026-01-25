@@ -2,9 +2,8 @@ import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
 // Initialize Stripe with your Secret Key
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
-  apiVersion: '2023-10-16', // Use stable version or your current one
-});
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
+
 
 // Pricing breakdown (in cents)
 // Matches Frontend: Letter ($2.00), Fax ($1.00), Both ($3.00)
