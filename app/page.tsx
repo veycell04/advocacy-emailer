@@ -185,12 +185,54 @@ export default function Home() {
             </p>
             <form onSubmit={handleFindSenators} className="flex flex-col gap-4">
               <div className="flex gap-4">
-                <input type="text" name="firstName" value={formData.firstName} onChange={handleInputChange} placeholder="First Name *" className="p-4 border rounded-lg w-1/2" required />
-                <input type="text" name="lastName" value={formData.lastName} onChange={handleInputChange} placeholder="Last Name *" className="p-4 border rounded-lg w-1/2" required />
+                <input 
+                  type="text" 
+                  name="firstName" 
+                  value={formData.firstName} 
+                  onChange={handleInputChange} 
+                  placeholder="First Name *" 
+                  className="p-4 border rounded-lg w-1/2 placeholder:text-gray-500 placeholder:font-bold" 
+                  required 
+                />
+                <input 
+                  type="text" 
+                  name="lastName" 
+                  value={formData.lastName} 
+                  onChange={handleInputChange} 
+                  placeholder="Last Name *" 
+                  className="p-4 border rounded-lg w-1/2 placeholder:text-gray-500 placeholder:font-bold" 
+                  required 
+                />
               </div>
-              <input type="email" name="userEmail" value={formData.userEmail} onChange={handleInputChange} placeholder="Email Address *" className="p-4 border rounded-lg" required />
-              <input type="text" name="streetAddress" value={formData.streetAddress} onChange={handleInputChange} placeholder="Street Address *" className="p-4 border rounded-lg" required />
-              <input type="text" name="zipCode" value={formData.zipCode} onChange={handleInputChange} placeholder="Zip Code (5-digit) *" pattern="[0-9]{5}" maxLength={5} className="p-4 border rounded-lg text-lg" required />
+              <input 
+                type="email" 
+                name="userEmail" 
+                value={formData.userEmail} 
+                onChange={handleInputChange} 
+                placeholder="Email Address *" 
+                className="p-4 border rounded-lg placeholder:text-gray-500 placeholder:font-bold" 
+                required 
+              />
+              <input 
+                type="text" 
+                name="streetAddress" 
+                value={formData.streetAddress} 
+                onChange={handleInputChange} 
+                placeholder="Street Address *" 
+                className="p-4 border rounded-lg placeholder:text-gray-500 placeholder:font-bold" 
+                required 
+              />
+              <input 
+                type="text" 
+                name="zipCode" 
+                value={formData.zipCode} 
+                onChange={handleInputChange} 
+                placeholder="Zip Code (5-digit) *" 
+                pattern="[0-9]{5}" 
+                maxLength={5} 
+                className="p-4 border rounded-lg text-lg placeholder:text-gray-500 placeholder:font-bold" 
+                required 
+              />
               <button type="submit" disabled={loading} className="bg-blue-700 hover:bg-blue-800 text-white font-bold py-4 px-6 mt-4 rounded-xl text-lg">
                 Continue
               </button>
