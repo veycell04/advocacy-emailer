@@ -62,7 +62,7 @@ export async function POST(request: Request) {
     const { zipCode, firstName, lastName, userEmail, streetAddress } = body;
 
     if (!zipCode || zipCode.length !== 5) return NextResponse.json({ error: 'Valid 5-digit Zip Code required.' }, { status: 400 });
-    if (!firstName?.trim() || !lastName?.trim() || !userEmail?.includes('@') || !streetAddress?.trim()) {
+    if (!firstName?.trim() || !lastName?.trim() || !streetAddress?.trim() ||!userEmail?.includes('@')) {
        return NextResponse.json({ error: 'All fields (Name, Email, Street Address) are required.' }, { status: 400 });
     }
 

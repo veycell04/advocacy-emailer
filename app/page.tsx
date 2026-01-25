@@ -181,7 +181,7 @@ export default function Home() {
         {currentStep === 'info' && !loading && (
           <div className="bg-white p-8 rounded-2xl shadow-xl border border-blue-100">
             <p className="mb-6 text-gray-600 text-center text-base">
-              Enter your information to identify your state Senators and prepare your message.
+              Enter your information to identify your Senators and prepare your message.
             </p>
             <form onSubmit={handleFindSenators} className="flex flex-col gap-4">
               <div className="flex gap-4">
