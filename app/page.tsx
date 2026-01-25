@@ -191,7 +191,7 @@ export default function Home() {
                   value={formData.firstName} 
                   onChange={handleInputChange} 
                   placeholder="First Name *" 
-                  className="p-4 border rounded-lg w-1/2 placeholder:text-gray-500 placeholder:font-bold" 
+                  className="p-4 border rounded-lg w-1/2 placeholder:text-gray-600 placeholder:font-bold placeholder:opacity-100" 
                   required 
                 />
                 <input 
@@ -200,7 +200,7 @@ export default function Home() {
                   value={formData.lastName} 
                   onChange={handleInputChange} 
                   placeholder="Last Name *" 
-                  className="p-4 border rounded-lg w-1/2 placeholder:text-gray-500 placeholder:font-bold" 
+                  className="p-4 border rounded-lg w-1/2 placeholder:text-gray-600 placeholder:font-bold placeholder:opacity-100" 
                   required 
                 />
               </div>
@@ -210,7 +210,7 @@ export default function Home() {
                 value={formData.userEmail} 
                 onChange={handleInputChange} 
                 placeholder="Email Address *" 
-                className="p-4 border rounded-lg placeholder:text-gray-500 placeholder:font-bold" 
+                className="p-4 border rounded-lg placeholder:text-gray-600 placeholder:font-bold placeholder:opacity-100" 
                 required 
               />
               <input 
@@ -219,7 +219,7 @@ export default function Home() {
                 value={formData.streetAddress} 
                 onChange={handleInputChange} 
                 placeholder="Street Address *" 
-                className="p-4 border rounded-lg placeholder:text-gray-500 placeholder:font-bold" 
+                className="p-4 border rounded-lg placeholder:text-gray-600 placeholder:font-bold placeholder:opacity-100" 
                 required 
               />
               <input 
@@ -230,7 +230,7 @@ export default function Home() {
                 placeholder="Zip Code (5-digit) *" 
                 pattern="[0-9]{5}" 
                 maxLength={5} 
-                className="p-4 border rounded-lg text-lg placeholder:text-gray-500 placeholder:font-bold" 
+                className="p-4 border rounded-lg text-lg placeholder:text-gray-600 placeholder:font-bold placeholder:opacity-100" 
                 required 
               />
               <button type="submit" disabled={loading} className="bg-blue-700 hover:bg-blue-800 text-white font-bold py-4 px-6 mt-4 rounded-xl text-lg">
