@@ -224,7 +224,7 @@ export default function Home() {
         {/* HEADER */}
         <div className="text-center mb-8 mt-4">
             <h1 className="text-3xl font-extrabold text-blue-900 tracking-tight">Rojava Action Center</h1>
-            <p className="text-blue-800 font-bold mt-1">Make your voice heard in Washington D.C</p>
+            <p className="text-blue-800 font-bold mt-1">Make your voice heard in Washington D.C.</p>
         </div>
         
         {error && (
