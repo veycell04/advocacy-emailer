@@ -1,24 +1,26 @@
 import { NextResponse } from "next/server";
 
-// Ensure these are set in your .env.local
+// 1. Get Credentials
 const sinchProjectId = process.env.SINCH_PROJECT_ID;
 const sinchApiKey = process.env.SINCH_API_KEY;
 const sinchApiSecret = process.env.SINCH_API_SECRET;
-// You need a 'From' number purchased in your Sinch dashboard
-const sinchFromNumber = process.env.SINCH_FROM_NUMBER || "+12064743870"; 
+// IMPORTANT: You must have a number purchased in your Sinch dashboard to send from.
+const sinchFromNumber = process.env.SINCH_FROM_NUMBER; 
 
 export async function POST(request: Request) {
   try {
-    if (!sinchProjectId || !sinchApiKey || !sinchApiSecret) {
-      console.error("Missing Sinch Credentials");
+    // 2. Validate Config
+    if (!sinchProjectId || !sinchApiKey || !sinchApiSecret || !sinchFromNumber) {
+      console.error("Missing Sinch configuration. Check .env variables.");
       return NextResponse.json(
         { error: "Server misconfiguration for faxing." },
         { status: 500 }
       );
     }
 
+    // 3. Parse Request
     const body = await request.json();
-    const { user, senators } = body;
+    const { senators } = body; // We only really need the senators array
 
     if (!senators || !Array.isArray(senators) || senators.length === 0) {
       return NextResponse.json(
@@ -27,53 +29,68 @@ export async function POST(request: Request) {
       );
     }
 
-    // Helper to format HTML content
-    const createFaxHtml = (senatorName: string, messageBody: string) => `
+    // 4. Helper to create HTML string
+    const createFaxHtml = (messageBody: string) => `
+      <!DOCTYPE html>
       <html>
-        <body style="font-family: 'Times New Roman', serif; font-size: 12pt; padding: 40px;">
-          <p>${messageBody.replace(/\n/g, "<br>")}</p>
+        <head>
+          <meta charset="UTF-8">
+        </head>
+        <body style="font-family: 'Times New Roman', serif; font-size: 12pt; padding: 40px; line-height: 1.5;">
+          <div style="white-space: pre-wrap;">${messageBody}</div>
         </body>
       </html>
     `;
 
+    // 5. Loop through Senators and Send
     const sendPromises = senators.map(async (senator: any) => {
-      // 1. Prepare Content
-      const htmlContent = createFaxHtml(senator.name, senator.body);
       
-      // 2. Create Blob (Node.js compatible file)
-      const blob = new Blob([htmlContent], { type: 'text/html' });
-
-      // 3. Construct FormData
-      const formData = new FormData();
-      formData.append("to", senator.fax);
-      formData.append("from", sinchFromNumber); // Sinch requires a 'from' number you own
-      formData.append("file", blob, "letter.html"); // Filename is important
-
-      // 4. Send to Sinch
-      const authHeader = 'Basic ' + Buffer.from(`${sinchApiKey}:${sinchApiSecret}`).toString('base64');
+      // A. Generate HTML Content
+      const htmlContent = createFaxHtml(senator.body);
       
+      // B. Convert HTML string to Base64 (Standard Node.js approach)
+      const base64File = Buffer.from(htmlContent, 'utf-8').toString('base64');
+
+      // C. Construct the JSON Payload for Sinch
+      // Reference: "SendFileAsFaxJson" in the API docs you provided
+      const payload = {
+        to: senator.fax,          // Ensure this is E.164 format (e.g. +12022241234)
+        from: sinchFromNumber,    // Required field
+        files: [
+          {
+            file: base64File,
+            fileType: "HTML"      // Explicitly tell Sinch this is HTML content
+          }
+        ],
+        headerPageNumbers: true,  // Adds "Page 1 of X" at the top
+        imageConversionMethod: "HALFTONE"
+      };
+
+      // D. Send Request
       const response = await fetch(
         `https://fax.api.sinch.com/v3/projects/${sinchProjectId}/faxes`,
         {
           method: "POST",
           headers: {
-            Authorization: authHeader,
-            // Do NOT set 'Content-Type': 'multipart/form-data' manually here.
-            // Fetch sets it automatically with the correct boundary when you pass FormData.
+            "Content-Type": "application/json",
+            // Basic Auth: base64(keyId:secret)
+            Authorization: `Basic ${Buffer.from(`${sinchApiKey}:${sinchApiSecret}`).toString("base64")}`,
           },
-          body: formData,
+          body: JSON.stringify(payload),
         }
       );
 
+      // E. Check Response
       if (!response.ok) {
         const errorText = await response.text();
         console.error(`Fax Failed for ${senator.name}:`, errorText);
-        throw new Error(`Sinch API Error: ${response.status} ${response.statusText}`);
+        throw new Error(`Sinch Error: ${response.status} - ${errorText}`);
       }
 
       return response.json();
     });
 
+    // 6. Wait for all faxes
     const results = await Promise.all(sendPromises);
 
     return NextResponse.json({
